@@ -37,6 +37,8 @@ public:
     }
     bool isoverflow() const { return _isoverflow; }
     bool isempty() const { return _isempty; }
+    void notempty() {_isempty = false;}
+    void notoverflow() {_isoverflow = false;}
 private:
     volatile size_t _head;
     volatile size_t _end;
@@ -56,7 +58,15 @@ size_t myrand()
 }
 void twrite(circular_queue& cq)
 {
-    while(1)if(cq.isoverflow()==false)cq.insert(myrand());
+    while(1)
+    {
+        if(cq.isoverflow()==false)
+        {
+            cq.insert(myrand());
+            cq.notempty();
+        }
+    }
+
 }
 static size_t times = 1;
 static int turn = 0;
@@ -75,6 +85,7 @@ void tread(circular_queue& cq,int id)
             turn = (turn+1)%2;
             lck.unlock();
             cv.notify_all();
+            cq.notoverflow();
         }
     }
 }
