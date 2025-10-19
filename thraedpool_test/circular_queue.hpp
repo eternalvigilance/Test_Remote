@@ -32,8 +32,23 @@ public:
     }
     void reserve(size_t&& num)
     {
-        if(_p != nullptr)delete[] _p;
-        _p = new T[num]{};
+        if(num <= _capaciti)
+        {
+            throw "You can only expand capacity";
+            return;
+        }
+        if(_p != nullptr)
+        {
+            if(isempty())
+            {
+                delete _p;
+                _p = new T[num]{};
+            }
+            else
+            {
+                throw "The queue is not empty";
+            }
+        }
     }
     size_t size()
     {
