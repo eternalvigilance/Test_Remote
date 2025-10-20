@@ -4,7 +4,7 @@ template<class T>
 class circular_queue
 {
 public:
-    circular_queue(size_t num = 1024):_head(0),_end(0),_capacity(num),_isoverflow(false),_isempty(false)
+    circular_queue(size_t num = 1024):_head(0),_end(0),_capacity(num),_isoverflow(false),_isempty(true)
     {_p = new T[num]{};}
     circular_queue(const circular_queue&) = delete;
     circular_queue& operator=(const circular_queue&) = delete;
@@ -19,6 +19,7 @@ public:
         _p[_end] = num;
         _end = (_end + 1)%_capacity;
         if(_end == _head)_isoverflow = true;
+        if(size() > _capacity/2)_isempty=false;
         _wm.unlock();
     }
     T&& pop()
@@ -27,6 +28,7 @@ public:
         T&& re = std::move(_p[_head]);
         _head = (_head + 1)%_capacity;
         if(_head==_end)_isempty = true;
+        if(size() < _capacity/2)_isoverflow=false;
         _rm.unlock();
         return std::move(re);
     }
@@ -57,8 +59,7 @@ public:
     }
     bool isoverflow() const { return _isoverflow; }
     bool isempty() const { return _isempty; }
-    void notempty() {_isempty = false;}
-    void notoverflow() {_isoverflow = false;}
+    void notempty(){_isempty=false;}
 private:
     volatile size_t _head;
     volatile size_t _end;

@@ -18,8 +18,8 @@ public:
     void insert(std::string&& task_name){queue.insert(std::forward<std::string>(task_name));}
     std::string&& pop(){return queue.pop();}
     bool isempty(){return queue.isempty();}
-    void notempty(){queue.notempty();}
-    void notoverflow(){queue.notoverflow();}
+    bool isoverflow(){return queue.isoverflow();}
+    void notempty(){return queue.notempty();}
 private:
     circular_queue<std::string> queue;
 };
