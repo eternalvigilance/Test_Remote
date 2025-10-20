@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "g++ build",
+        "type": "cppbuild",
+        "command": "/usr/bin/g++",  
+        "args": [
+          "-g",        
+          "-std=c++11",                            
+          "${workspaceFolder}/*.cc",        
+          "-o",
+          "${workspaceFolder}/bin/main"
+        ],
+        "group": { "kind": "build", "isDefault": true },
+        "problemMatcher": ["$gcc"]
+      }
+    ]
+  }

@@ -13,7 +13,7 @@ public:
         delete[] _p;
         _p = nullptr;
     }
-    void insert(const int&& num)
+    void insert(T&& num)
     {
         _wm.lock();
         _p[_end] = num;
@@ -21,18 +21,18 @@ public:
         if(_end == _head)_isoverflow = true;
         _wm.unlock();
     }
-    T& pop()
+    T&& pop()
     {
         _rm.lock();
-        size_t re = _p[_head];
+        T&& re = std::move(_p[_head]);
         _head = (_head + 1)%_capacity;
         if(_head==_end)_isempty = true;
         _rm.unlock();
-        return re;
+        return std::move(re);
     }
     void reserve(size_t&& num)
     {
-        if(num <= _capaciti)
+        if(num <= _capacity)
         {
             throw "You can only expand capacity";
             return;
